@@ -28,6 +28,10 @@ class Game(models.Model):
         self.save()
         return self.access_code
 
+    def num_players(self):
+        """return the current number of players in the game"""
+        return Player.objects.filter(game=self).count()
+
 
 class Player(models.Model):
     name = models.CharField(max_length=256)
@@ -41,7 +45,6 @@ class Player(models.Model):
             return True
         else:
             return False
-
 
     def join_game(self, access_code):
         """create a new player instance and connect to the game identified by the access code"""
