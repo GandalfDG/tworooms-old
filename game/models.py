@@ -11,9 +11,9 @@ class Game(models.Model):
     state = models.CharField(max_length=256)
 
     # a game may consist of either 3 or 5 rounds
-    rounds = models.PositiveSmallIntegerField()
+    rounds = models.PositiveSmallIntegerField(default=3)
 
-    current_round = models.PositiveSmallIntegerField()
+    current_round = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return 'game ' + self.access_code
