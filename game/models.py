@@ -41,7 +41,7 @@ class Player(models.Model):
 
     def is_first_player(self):
         """the first player to join a game becomes the moderator"""
-        if not Player.objects.filter(game=self.game).exists():
+        if self.game.num_players() == 0:
             return True
         else:
             return False
