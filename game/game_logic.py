@@ -2,11 +2,13 @@ import random
 
 random.seed()
 
-def generate_access_code():
-    code = ''
-    possible = 'abcdefghjkmnpqrstuvwxyz23456789'
+class GameLogic:
 
-    for i in range(0, 6):
-        code += random.choice(possible)
+    def generate_access_code(self):
+        code = ''
+        possible = 'abcdefghjkmnpqrstuvwxyz23456789'
 
-    return code
+        for i in range(0, 6):
+            code += random.choice(possible)
+
+        return code
