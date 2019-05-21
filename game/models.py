@@ -1,4 +1,7 @@
 from django.db import models
+from game.game_logic import GameLogic
+
+logic = GameLogic()
 
 # Create your models here.
 
@@ -18,11 +21,33 @@ class Game(models.Model):
     def __str__(self):
         return 'game ' + self.access_code
 
+    def new_game(self):
+        """create a new game instance and return the access code string"""
+        self.access_code = logic.generate_access_code()
+        self.state = "waitingForPlayers"
+        self.save()
+        return self.access_code
+
+
 class Player(models.Model):
     name = models.CharField(max_length=256)
     is_moderator = models.BooleanField(default=False)
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
-    role = models.ForeignKey('Card', on_delete=models.CASCADE)
+    game = models.ForeignKey('Game', on_delete=models.CASCADE, null=True)
+    role = models.ForeignKey('Card', on_delete=models.CASCADE, null=True)
+
+    def is_first_player(self):
+        """the first player to join a game becomes the moderator"""
+        if not Player.objects.filter(game=self.game).exists():
+            return True
+        else:
+            return False
+
+
+    def join_game(self, access_code):
+        """create a new player instance and connect to the game identified by the access code"""
+        self.game = Game.objects.get(access_code=access_code)
+        self.is_moderator = self.is_first_player()
+        self.save()
 
 
 class Playset(models.Model):
@@ -46,7 +71,7 @@ class Card(models.Model):
         ('YL', 'Yellow'),
     ]
 
-    color = models.CharField(max_length=2, choices=CARD_COLORS)
+    color = models.CharField(max_length=2, choices=CARD_COLORS, null=True)
 
     tagline = models.TextField(null=True)
     full_description = models.TextField(null=True)

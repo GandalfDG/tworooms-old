@@ -5,18 +5,25 @@ from game.models import *
 
 
 class GameTestCase(TestCase):
+
+    player1 = Player(name='Alfa')
+
+
     def setUp(self):
-        Game.objects.create(access_code="asdf")
+        self.game = Game()
+        self.code = self.game.new_game()
 
     def test_game_create(self):
-        Game.new_game()
-        print(Game.objects.all())
+        self.assertIsInstance(self.code, str)
+        self.assertEqual(Game.objects.get(
+            access_code=self.code).state, 'waitingForPlayers')
 
-    def test_game_defaults(self):
-        Player.objects.create(name='alfa')
-        Player.objects.create(name='bravo')
-        Player.objects.create(name='charlie')
-        Player.objects.create(name='delta')
-        Player.objects.create(name='echo')
-        Player.objects.create(name='foxtrot')
+    def test_join_game(self):
+        self.player1.join_game(self.code)
+        self.assertEqual(self.player1.game, self.game)
+        self.assertTrue(self.player1.is_moderator)
+        """we should have one player associated with the game"""
+        self.assertEqual(Player.objects.filter(game=self.game).count(), 1)
 
+   # def test_six_player_game(self):
+        
