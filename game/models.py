@@ -19,7 +19,7 @@ class Game(models.Model):
     playset = models.ForeignKey('Playset', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return 'game ' + self.access_code
+        return self.access_code
 
     def new_game(self):
         """create a new game instance and return the access code string"""
@@ -33,6 +33,7 @@ class Game(models.Model):
         return Player.objects.filter(game=self).count()
 
     def expand_playset(self):
+        """Retrieve the cards from the selected playset from the database"""
         self.cards = []
 
         # append each card from the playset to the list of cards

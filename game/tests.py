@@ -103,14 +103,15 @@ class playsetTestCase(TestCase):
             player.join_game(self.code)
 
     def test_game_playset_even(self):
-        self.assertEqual(Game.objects.get(access_code=self.code).playset, self.basic_playset)
+        self.assertEqual(Game.objects.get(
+            access_code=self.code).playset, self.basic_playset)
 
         # the basic playset has two required cards.
         # the rest should be made up of equal numbers of red and blue team.
         self.game.expand_playset()
-        
+
         self.assertEqual(len(self.game.cards), 6)
-    
+
     def test_game_playset_odd(self):
         player7 = Player(name="Golf")
         player7.join_game(self.code)
@@ -119,5 +120,3 @@ class playsetTestCase(TestCase):
 
         self.assertEqual(len(self.game.cards), 7)
         self.assertEqual(self.game.cards[-1].name, 'Gambler')
-
-
