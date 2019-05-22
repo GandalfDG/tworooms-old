@@ -26,6 +26,8 @@ def new_game(request):
 
 
 def join_game(request):
+    """handles a form submitted POST for joining an existing game"""
+    # TODO handle a nonexistent access code
     code = request.POST['access_code']
     playername = request.POST['player_name']
 
@@ -38,10 +40,15 @@ def join_game(request):
 
 
 def game(request, access_code):
+    """the lobby where players will join before starting a game"""
+    # TODO handle a nonexistent game URL
     game = Game.objects.get(access_code=access_code)
-    context = {
-        'access_code': access_code,
-        'players': game.get_player_list,
-        'current_player': Player.objects.get(id=request.session['player_id'])
-    }
-    return render(request, 'game/main_game.html', context)
+    if 'player_id' in request.session:
+        context = {
+            'access_code': access_code,
+            'players': game.get_player_list,
+            'current_player': Player.objects.get(id=request.session['player_id'])
+        }
+        return render(request, 'game/main_game.html', context)
+    else:
+        return redirect(landing_page)
