@@ -36,7 +36,7 @@ class Game(models.Model):
         self.cards = []
 
         # append each card from the playset to the list of cards
-        for card in Card.objects.filter(playset=self.playset):
+        for card in self.playset.get_card_list():
             self.cards.append(card)
 
         # fill the remaining slots with red team and blue team
@@ -46,7 +46,10 @@ class Game(models.Model):
             self.cards.append(red_card)
             self.cards.append(blue_card)
 
-        # TODO fill in final slot for an odd number of players
+        # fill in final slot for an odd number of players
+        gambler_card = Card.objects.get(name='Gambler')
+        if len(self.cards) != self.num_players():
+            self.cards.append(gambler_card)
 
         return self.cards
 
@@ -81,7 +84,8 @@ class Playset(models.Model):
     def __str__(self):
         return self.name
 
-    
+    def get_card_list(self):
+        return Card.objects.filter(playset=self)
 
 
 class Card(models.Model):
