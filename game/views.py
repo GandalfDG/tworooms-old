@@ -8,7 +8,7 @@ def write_session(request, game, player):
     request.session['current_game'] = game.id
 
 def index(request):
-    return render(request, 'game/index.html')
+    return render(request, 'game/app.html')
 
 
 def landing_page(request):
@@ -37,6 +37,7 @@ def join_game(request):
     player.join_game(code)
     write_session(request, game, player)
     return redirect(game)
+
 
 
 def game(request, access_code):

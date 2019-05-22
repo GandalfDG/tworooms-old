@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>2R1B</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" defer></script>
+    <script src="../../static/game/app.js" defer></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Vue.js loaded</h1>
+        <div id="home" v-if="current_page === 'home'">
+            <h3>HOME</h3>
+        </div>
+        <div id="lobby" v-if="current_page === 'lobby'">
+            <h3>LOBBY</h3>
+        </div>
+        <div id="ingame" v-if="current_page === 'ingame'">
+            <h3>INGAME</h3>
+        </div>
+    </div>
+
+</body>
+
+</html>
