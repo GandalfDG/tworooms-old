@@ -17,6 +17,15 @@
         <input type="submit" value="New Game">
     </form>
 
+    <p>Join an existing game</p>
+
+    <form action="{% url 'join_game' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="player_name" required>
+        <input type="text" name="access_code" required>
+        <input type="submit" value="Join Game">
+    </form>
+
 
 </body>
 

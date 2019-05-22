@@ -16,6 +16,16 @@ def new_game(request):
     player.join_game(code)
     return redirect(game)
 
+def join_game(request):
+    code = request.POST['access_code']
+    playername = request.POST['player_name']
+
+    game = Game.objects.get(access_code=code)
+    player = Player(name=playername)
+
+    player.join_game(code)
+    return redirect(game)
+
 def game(request, access_code):
     game = Game.objects.get(access_code=access_code)
     context = {
