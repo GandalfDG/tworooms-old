@@ -1,7 +1,5 @@
 from django.db import models
-from game.game_logic import GameLogic
-
-logic = GameLogic()
+import game.game_logic as gl
 
 # Create your models here.
 
@@ -18,12 +16,14 @@ class Game(models.Model):
 
     current_round = models.PositiveSmallIntegerField(default=1)
 
+    playset = models.ForeignKey('Playset', on_delete=models.CASCADE, null=True)
+
     def __str__(self):
         return 'game ' + self.access_code
 
     def new_game(self):
         """create a new game instance and return the access code string"""
-        self.access_code = logic.generate_access_code()
+        self.access_code = gl.generate_access_code()
         self.state = "waitingForPlayers"
         self.save()
         return self.access_code
@@ -31,6 +31,27 @@ class Game(models.Model):
     def num_players(self):
         """return the current number of players in the game"""
         return Player.objects.filter(game=self).count()
+
+    def expand_playset(self):
+        self.cards = []
+
+        # append each card from the playset to the list of cards
+        for card in Card.objects.filter(playset=self.playset):
+            self.cards.append(card)
+
+        # fill the remaining slots with red team and blue team
+        red_card = Card.objects.get(name='Red Team')
+        blue_card = Card.objects.get(name='Blue Team')
+        for _ in range(0, int((self.num_players() - len(self.cards)) / 2)):
+            self.cards.append(red_card)
+            self.cards.append(blue_card)
+
+        # TODO fill in final slot for an odd number of players
+
+        return self.cards
+
+    def shuffle_cards(self):
+        pass
 
 
 class Player(models.Model):
@@ -59,6 +80,8 @@ class Playset(models.Model):
 
     def __str__(self):
         return self.name
+
+    
 
 
 class Card(models.Model):

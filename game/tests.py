@@ -9,11 +9,13 @@ class GameTestCase(TestCase):
     player1 = Player(name='Alfa')
 
     def setUp(self):
+        # create a game and put it in the database
         self.game = Game()
         self.code = self.game.new_game()
 
     def test_game_create(self):
         self.assertIsInstance(self.code, str)
+        self.assertTrue(Game.objects.filter(access_code=self.code).count, 1)
         self.assertEqual(Game.objects.get(
             access_code=self.code).state, 'waitingForPlayers')
 
@@ -61,4 +63,51 @@ class GameTestCase(TestCase):
         self.assertFalse(players[1].is_moderator)
 
         self.assertEqual(self.game.rounds, 3)
+
+
+class playsetTestCase(TestCase):
+
+    cards = [
+        Card(name='President'),
+        Card(name='Bomber'),
+        Card(name='Blue Team'),
+        Card(name='Red Team'),
+    ]
+
+    players = [
+        Player(name='Alfa'),
+        Player(name='Bravo'),
+        Player(name='Charlie'),
+        Player(name='Delta'),
+        Player(name='Echo'),
+        Player(name='Foxtrot'),
+    ]
+
+    def setUp(self):
+
+        for card in self.cards:
+            card.save()
+
+        self.basic_playset = Playset.objects.create(name='basic')
+        self.basic_playset.cards.add(self.cards[0])
+        self.basic_playset.cards.add(self.cards[1])
+        self.basic_playset.save()
+
+        self.game = Game()
+        self.code = self.game.new_game()
+        self.game.playset = self.basic_playset
+        self.game.save()
+
+        for player in self.players:
+            player.join_game(self.code)
+
+    def test_game_playset(self):
+        self.assertEqual(Game.objects.get(access_code=self.code).playset, self.basic_playset)
+
+        # the basic playset has two required cards.
+        # the rest should be made up of equal numbers of red and blue team.
+        self.game.expand_playset()
         
+        self.assertEqual(len(self.game.cards), 6)
+
+
