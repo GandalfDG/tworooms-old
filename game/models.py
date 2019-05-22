@@ -21,6 +21,9 @@ class Game(models.Model):
     def __str__(self):
         return self.access_code
 
+    def get_absolute_url(self):
+        return '/game/' + self.access_code + '/'
+
     def new_game(self):
         """create a new game instance and return the access code string"""
         self.access_code = gl.generate_access_code()
@@ -31,6 +34,9 @@ class Game(models.Model):
     def num_players(self):
         """return the current number of players in the game"""
         return Player.objects.filter(game=self).count()
+
+    def get_player_list(self):
+        return Player.objects.filter(game=self)
 
     def expand_playset(self):
         """Retrieve the cards from the selected playset from the database"""
