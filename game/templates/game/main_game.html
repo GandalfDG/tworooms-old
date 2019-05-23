@@ -23,10 +23,6 @@
     <p>you are {{ current_player.name }}</p>
     {% endif %}
 
-    <form action="{% url 'start_game' %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Start Game">
-    </form>
 
 </body>
 

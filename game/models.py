@@ -70,6 +70,9 @@ class Player(models.Model):
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=True)
     role = models.ForeignKey('Card', on_delete=models.CASCADE, null=True)
 
+    def __str__(self):
+        return self.name + ' #' + str(self.id)
+
     def is_first_player(self):
         """the first player to join a game becomes the moderator"""
         if self.game.num_players() == 0:
