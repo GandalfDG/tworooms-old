@@ -1,49 +1,38 @@
-<!DOCTYPE html>
-<html>
+{% extends "game/base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>2R1B</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" defer></script>
-    <script src="../../static/game/app.js" defer></script>
-</head>
+{% block content %}
 
-<body>
-    <div id="app">
-        <h1>Vue.js loaded</h1>
-        <div id="home" v-if="current_page === 'home'">
-            <h3>HOME</h3>
-            <p>Create a new game</p>
+<div id="app">
+    <h1>Welcome to Two Rooms</h1>
+    <div id="home" v-if="current_page === 'home'">
+        <h3>HOME</h3>
+        <p>Create a new game</p>
 
-            <form action="{% url 'new_game' %}" method="post">
-                {% csrf_token %}
-                <label for="new_player_name">Name:</label>
-                <input type="text" id="new_player_name" name="player_name" required>
-                <input type="submit" value="New Game">
-            </form>
+        <form action="{% url 'new_game' %}" method="post">
+            {% csrf_token %}
+            <label for="new_player_name">Name:</label>
+            <input type="text" id="new_player_name" name="player_name" required>
+            <input type="submit" value="New Game">
+        </form>
 
-            <p>Join an existing game</p>
+        <p>Join an existing game</p>
 
-            <form action="{% url 'join_game' %}" method="post">
-                {% csrf_token %}
-                <label for="join_player_name">Name:</label>
-                <input type="text" id="join_player_name" name="player_name" required>
-                <label for="join_access_code">Code:</label>
-                <input type="text" id="join_access_code" name="access_code" required>
-                <input type="submit" value="Join Game">
-            </form>
-        </div>
-        
-        <div id="lobby" v-if="current_page === 'lobby'">
-            <h3>LOBBY</h3>
-        </div>
-        <div id="ingame" v-if="current_page === 'ingame'">
-            <h3>INGAME</h3>
-        </div>
+        <form action="{% url 'join_game' %}" method="post">
+            {% csrf_token %}
+            <label for="join_player_name">Name:</label>
+            <input type="text" id="join_player_name" name="player_name" required>
+            <label for="join_access_code">Code:</label>
+            <input type="text" id="join_access_code" name="access_code" required>
+            <input type="submit" value="Join Game">
+        </form>
     </div>
 
-</body>
+    <div id="lobby" v-if="current_page === 'lobby'">
+        <h3>LOBBY</h3>
+    </div>
+    <div id="ingame" v-if="current_page === 'ingame'">
+        <h3>INGAME</h3>
+    </div>
+</div>
 
-</html>
+{% endblock %}
