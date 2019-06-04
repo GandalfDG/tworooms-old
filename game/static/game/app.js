@@ -8,5 +8,8 @@ var app = new Vue({
         message: 'Hello Vue!',
         current_page: page,
     }
+    computed: {
+        current_time: 
+    }
 })
 
