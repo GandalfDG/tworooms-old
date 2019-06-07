@@ -67,11 +67,11 @@ class Game(models.Model):
 class Player(models.Model):
     name = models.CharField(max_length=256)
     is_moderator = models.BooleanField(default=False)
-    game = models.ForeignKey('Game', on_delete=models.CASCADE, null=True)
+    game = models.ForeignKey('Game', related_name='players', on_delete=models.CASCADE, null=True)
     role = models.ForeignKey('Card', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.name + ' #' + str(self.id)
+        return self.name
 
     def is_first_player(self):
         """the first player to join a game becomes the moderator"""
