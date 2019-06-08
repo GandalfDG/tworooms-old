@@ -1,7 +1,22 @@
 from django.shortcuts import render, redirect
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from game.models import Game, Player
+from game.serializers import GameSerializer
 
 # Create your views here.
+
+@api_view(['POST'])
+def game_create(request):
+    """
+    receive a player name in a POST to create a new game
+    return the newly created game object
+    """
+    game = Game()
+    game.new_game()
+    serializer = GameSerializer(game)
+    return Response(serializer.data)
 
 def write_session(request, game, player):
     request.session['player_id'] = player.id

@@ -123,6 +123,7 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # TODO come back to permissions for the API
+        #  'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }

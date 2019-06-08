@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from game.views import index, landing_page, new_game, join_game, game
+from game.views import index, landing_page, new_game, join_game, game, game_create
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
     path('game/', landing_page),
-    path('newgame/', new_game, name='new_game'),
+    path('newgame/', game_create, name='new_game'),
     path('joingame/', join_game, name='join_game'),
     path('game/<str:access_code>/', game, name='new_game'),
 ]
