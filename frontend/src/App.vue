@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="col-md-6 offset-md-3 border">
     <img src="./assets/logo.png">
     <router-view/>
   </div>
