@@ -30,7 +30,7 @@ export default {
     createGame () {
       let self = this
       axios
-        .post('http://localhost:8000/newgame/', { player_name: this.name })
+        .post('http://localhost:8000/game/', { player_name: this.name })
         .then((response) => {
           self.accessCode = response.data.access_code
           self.$router.push('/lobby/' + self.accessCode)

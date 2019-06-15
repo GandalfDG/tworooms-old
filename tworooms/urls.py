@@ -15,13 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from game.views import index, landing_page, new_game, join_game, game, game_create
+from game.views import api_root, game
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
-    path('game/', landing_page),
-    path('newgame/', game_create, name='new_game'),
-    path('joingame/', join_game, name='join_game'),
-    path('game/<str:access_code>/', game, name='new_game'),
+    path('', api_root, name="API Root"),
+    path('game/', game, name='game'),
 ]

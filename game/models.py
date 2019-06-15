@@ -68,7 +68,7 @@ class Player(models.Model):
     name = models.CharField(max_length=256)
     is_moderator = models.BooleanField(default=False)
     game = models.ForeignKey('Game', related_name='players', on_delete=models.CASCADE, null=True)
-    role = models.ForeignKey('Card', on_delete=models.CASCADE, null=True)
+    role = models.ForeignKey('Card', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
