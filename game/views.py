@@ -15,7 +15,7 @@ def game_create(request):
     """
     game = Game()
     code = game.new_game()
-    playername = request.POST['player_name']
+    playername = request.data['player_name']
     player = Player(name=playername)
     player.join_game(code)
     # write_session(request, game, player)
