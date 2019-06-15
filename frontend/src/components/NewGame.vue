@@ -28,9 +28,10 @@ export default {
   },
   methods: {
     createGame () {
+      let self = this
       axios
         .post('http://localhost:8000/newgame/', { player_name: this.name })
-        .then(updateAccessCode(response))
+        .then((response) => self.accessCode = response.data.access_code)
     },
     updateAccessCode (response) {
       this.accessCode = response.data.access_code
