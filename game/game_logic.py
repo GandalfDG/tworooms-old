@@ -10,4 +10,4 @@ def generate_access_code():
     for _ in range(0, 6):
         code += random.choice(possible)
 
-    return code
+    return code.upper()
