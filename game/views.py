@@ -27,7 +27,7 @@ def game(request):
     
     elif request.method == 'GET': #retrieve info for an existing game
         if 'access_code' in request.query_params:
-            game = Game.objects.get(access_code=request.query_params['access_code'].upper())
+            game = Game.objects.get(access_code=request.query_params['access_code'])
             serializer = GameSerializer(game)
             return Response(serializer.data)
         else:
@@ -44,7 +44,7 @@ def join(request):
         player = Player(name=playername)
         accesscode = request.data['access_code']
         player.join_game(accesscode)
-        game = Game.objects.get(access_code=accesscode.upper())
+        game = Game.objects.get(access_code=accesscode)
         serializer = GameSerializer(game)
         return Response(serializer.data)
         
