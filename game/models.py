@@ -63,6 +63,10 @@ class Game(models.Model):
     def shuffle_cards(self):
         pass
 
+    def start_game(self):
+        self.state = "gameInProgress"
+        self.save()
+
 
 class Player(models.Model):
     name = models.CharField(max_length=256)

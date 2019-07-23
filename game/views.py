@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http.response import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -54,6 +55,17 @@ def api_root(request, format=None):
     return Response({
         'game': reverse('game', request=request, format=format)
     })
+
+@api_view(['POST'])
+def start_game(request):
+    """
+    start the game corresponding to the posted access code
+    """
+    if request.method == 'POST':
+        game = Game.objects.get(access_code=request.data['access_code'])
+        game.start_game()
+        return HttpResponse(status=204)
+
 
 def write_session(request, game, player):
     request.session['player_id'] = player.id
