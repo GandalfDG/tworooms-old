@@ -66,8 +66,13 @@ class Game(models.Model):
     def shuffle_cards(self):
         pass
 
-    def start_game(self):
-        self.state = "gameInProgress"
+    def ready_game(self):
+        self.state = "pickingLeader"
+        self.current_round = 3
+        self.save()
+
+    def start_round(self):
+        self.state = "roundStarted"
         self.start_time = datetime.now().timestamp()
         self.save()
 

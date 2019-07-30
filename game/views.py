@@ -57,14 +57,20 @@ def api_root(request, format=None):
     })
 
 @api_view(['POST'])
-def start_game(request):
+def transition_game(request):
     """
-    start the game corresponding to the posted access code
+    update the game state based on frontend actions
     """
     if request.method == 'POST':
         game = Game.objects.get(access_code=request.data['access_code'])
-        game.start_game()
-        return HttpResponse(status=204)
+        
+        if(request.data['state'] == "pickingLeader"):
+            game.ready_game()
+        elif(request.data['state'] == "roundStarted"):
+            game.start_round()
+        
+        serializer = GameSerializer(game)
+        return Response(serializer.data)
 
 
 def write_session(request, game, player):
