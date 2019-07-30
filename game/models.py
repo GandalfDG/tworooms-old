@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timezone
 import game.game_logic as gl
 
 # Create your models here.
@@ -19,7 +19,7 @@ class Game(models.Model):
 
     playset = models.ForeignKey('Playset', on_delete=models.CASCADE, null=True)
 
-    start_time = models.DateTimeField(null=True)
+    start_time = models.BigIntegerField(null=True)
 
     def __str__(self):
         return self.access_code
@@ -68,7 +68,7 @@ class Game(models.Model):
 
     def start_game(self):
         self.state = "gameInProgress"
-        self.start_time = datetime.now()
+        self.start_time = datetime.now().timestamp()
         self.save()
 
 
