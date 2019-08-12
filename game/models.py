@@ -30,6 +30,7 @@ class Game(models.Model):
     def new_game(self):
         """create a new game instance and return the access code string"""
         self.access_code = gl.generate_access_code()
+        self.state = 'waitingForPlayers'
         self.save()
         return self.access_code
 

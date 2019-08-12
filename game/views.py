@@ -63,9 +63,15 @@ def update_game(request):
     """
     if request.method == 'POST':
         game = Game.objects.get(access_code=request.data['access_code'])
-        
-        game.state = request.data['state']
-        
+
+        if 'state' in request.data:
+            game.state = request.data['state']
+
+        if 'start_time' in request.data:
+            game.start_time = request.data['start_time']
+
+        game.save()
+
         serializer = GameSerializer(game)
         return Response(serializer.data)
 
