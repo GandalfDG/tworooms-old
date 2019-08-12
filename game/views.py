@@ -57,17 +57,14 @@ def api_root(request, format=None):
     })
 
 @api_view(['POST'])
-def transition_game(request):
+def update_game(request):
     """
     update the game state based on frontend actions
     """
     if request.method == 'POST':
         game = Game.objects.get(access_code=request.data['access_code'])
         
-        if(request.data['state'] == "pickingLeader"):
-            game.ready_game()
-        elif(request.data['state'] == "roundStarted"):
-            game.start_round()
+        game.state = request.data['state']
         
         serializer = GameSerializer(game)
         return Response(serializer.data)

@@ -10,7 +10,7 @@ class Game(models.Model):
     access_code = models.CharField(max_length=256, unique=True)
 
     # TODO there will be a finite number of game states, use choices option
-    state = models.CharField(max_length=256)
+    state = models.CharField(max_length=256, default='waitingForPlayers')
 
     # a game may consist of either 3 or 5 rounds
     rounds = models.PositiveSmallIntegerField(default=3)
@@ -30,7 +30,6 @@ class Game(models.Model):
     def new_game(self):
         """create a new game instance and return the access code string"""
         self.access_code = gl.generate_access_code()
-        self.state = "waitingForPlayers"
         self.save()
         return self.access_code
 
@@ -65,16 +64,6 @@ class Game(models.Model):
 
     def shuffle_cards(self):
         pass
-
-    def ready_game(self):
-        self.state = "pickingLeader"
-        self.current_round = 3
-        self.save()
-
-    def start_round(self):
-        self.state = "roundStarted"
-        self.start_time = datetime.now().timestamp()
-        self.save()
 
 
 class Player(models.Model):
