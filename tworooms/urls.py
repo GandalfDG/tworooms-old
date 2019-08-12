@@ -22,5 +22,5 @@ urlpatterns = [
     path('', api_root, name="API Root"),
     path('game/', game, name='game'),
     path('join/', join, name='join'),
-    path('updategame/', update_game, name='update game'),
+    path('gamestate/', update_game, name='update game'),
 ]
