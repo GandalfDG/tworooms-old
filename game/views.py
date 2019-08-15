@@ -56,6 +56,11 @@ def api_root(request, format=None):
         'game': reverse('game', request=request, format=format)
     })
 
+##TODO figure out how players access their player objects
+# @api_view(['GET'])
+# def player(request, format=None):
+#     return
+
 @api_view(['POST'])
 def update_game(request):
     """
