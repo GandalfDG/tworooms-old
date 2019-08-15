@@ -66,6 +66,8 @@ def update_game(request):
 
         if 'state' in request.data:
             game.state = request.data['state']
+            if game.state == 'pickingLeader':
+                game.shuffle_cards()
 
         if 'start_time' in request.data:
             game.start_time = request.data['start_time']

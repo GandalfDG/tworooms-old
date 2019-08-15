@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timezone
+import random
 import game.game_logic as gl
 
 # Create your models here.
@@ -17,7 +18,7 @@ class Game(models.Model):
 
     current_round = models.PositiveSmallIntegerField(default=1)
 
-    playset = models.ForeignKey('Playset', on_delete=models.CASCADE, null=True)
+    # playset = models.ForeignKey('Playset', on_delete=models.CASCADE, null=True)
 
     start_time = models.BigIntegerField(null=True)
 
@@ -41,37 +42,43 @@ class Game(models.Model):
     def get_player_list(self):
         return Player.objects.filter(game=self)
 
-    def expand_playset(self):
-        """Retrieve the cards from the selected playset from the database"""
-        self.cards = []
-
-        # append each card from the playset to the list of cards
-        for card in self.playset.get_card_list():
-            self.cards.append(card)
-
-        # fill the remaining slots with red team and blue team
-        red_card = Card.objects.get(name='Red Team')
-        blue_card = Card.objects.get(name='Blue Team')
-        for _ in range(0, int((self.num_players() - len(self.cards)) / 2)):
-            self.cards.append(red_card)
-            self.cards.append(blue_card)
-
-        # fill in final slot for an odd number of players
-        gambler_card = Card.objects.get(name='Gambler')
-        if len(self.cards) != self.num_players():
-            self.cards.append(gambler_card)
-
-        return self.cards
-
     def shuffle_cards(self):
-        pass
+        players = self.get_player_list()
+        indices = range(len(players))
+        random.shuffle(indices)
+        for index, player in zip(indices, players):
+            player.card_idx = index
+            player.save
+
+    # def expand_playset(self):
+    #     """Retrieve the cards from the selected playset from the database"""
+    #     self.cards = []
+
+    #     # append each card from the playset to the list of cards
+    #     for card in self.playset.get_card_list():
+    #         self.cards.append(card)
+
+    #     # fill the remaining slots with red team and blue team
+    #     red_card = Card.objects.get(name='Red Team')
+    #     blue_card = Card.objects.get(name='Blue Team')
+    #     for _ in range(0, int((self.num_players() - len(self.cards)) / 2)):
+    #         self.cards.append(red_card)
+    #         self.cards.append(blue_card)
+
+    #     # fill in final slot for an odd number of players
+    #     gambler_card = Card.objects.get(name='Gambler')
+    #     if len(self.cards) != self.num_players():
+    #         self.cards.append(gambler_card)
+
+        # return self.cards
 
 
 class Player(models.Model):
     name = models.CharField(max_length=256)
     is_moderator = models.BooleanField(default=False)
-    game = models.ForeignKey('Game', related_name='players', on_delete=models.CASCADE, null=True)
-    role = models.ForeignKey('Card', on_delete=models.CASCADE, null=True, blank=True)
+    game = models.ForeignKey(
+        'Game', related_name='players', on_delete=models.CASCADE, null=True)
+    card_idx = models.IntegerField(null=True)
 
     def __str__(self):
         return self.name
@@ -90,34 +97,34 @@ class Player(models.Model):
         self.save()
 
 
-class Playset(models.Model):
-    name = models.CharField(max_length=256)
-    cards = models.ManyToManyField('Card')
+# class Playset(models.Model):
+#     name = models.CharField(max_length=256)
+#     cards = models.ManyToManyField('Card')
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
-    def get_card_list(self):
-        return Card.objects.filter(playset=self)
+#     def get_card_list(self):
+#         return Card.objects.filter(playset=self)
 
 
-class Card(models.Model):
-    name = models.CharField(max_length=256)
+# class Card(models.Model):
+#     name = models.CharField(max_length=256)
 
-    CARD_COLORS = [
-        ('RD', 'Red'),
-        ('BL', 'Blue'),
-        ('GR', 'Gray'),
-        ('PR', 'Purple'),
-        ('PK', 'Pink'),
-        ('GN', 'Green'),
-        ('YL', 'Yellow'),
-    ]
+#     CARD_COLORS = [
+#         ('RD', 'Red'),
+#         ('BL', 'Blue'),
+#         ('GR', 'Gray'),
+#         ('PR', 'Purple'),
+#         ('PK', 'Pink'),
+#         ('GN', 'Green'),
+#         ('YL', 'Yellow'),
+#     ]
 
-    color = models.CharField(max_length=2, choices=CARD_COLORS, null=True)
+#     color = models.CharField(max_length=2, choices=CARD_COLORS, null=True)
 
-    tagline = models.TextField(null=True)
-    full_description = models.TextField(null=True)
+#     tagline = models.TextField(null=True)
+#     full_description = models.TextField(null=True)
 
-    def __str__(self):
-        return self.name + ' (' + self.color + ')'
+#     def __str__(self):
+#         return self.name + ' (' + self.color + ')'
