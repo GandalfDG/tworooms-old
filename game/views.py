@@ -39,6 +39,17 @@ def game(request):
         else:
             return Response()
 
+@api_view(['GET'])
+def player(request):
+    """
+    get request with a player ID param and return that player object
+    """
+    if request.method == 'GET':
+        player = Player.objects.get(id=request.query_params['player_id'])
+
+        player_serializer = PlayerSerializer(player)
+        return Response(player_serializer.data)
+
 @api_view(['POST'])
 def join(request):
     """
