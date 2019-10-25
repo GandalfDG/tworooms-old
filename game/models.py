@@ -95,6 +95,7 @@ class Player(models.Model):
         self.game = Game.objects.get(access_code=access_code)
         self.is_moderator = self.is_first_player()
         self.save()
+        return self
 
 
 # class Playset(models.Model):

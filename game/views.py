@@ -5,9 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from game.models import Game, Player
-from game.serializers import GameSerializer
-
-# Create your views here.
+from game.serializers import GameSerializer, PlayerSerializer
 
 @api_view(['POST', 'GET'])
 def game(request):
@@ -21,10 +19,15 @@ def game(request):
         playername = request.data['player_name']
         player = Player(name=playername)
         player.join_game(code)
-        # write_session(request, game, player)
 
-        serializer = GameSerializer(game)
-        return Response(serializer.data)
+        game_serializer = GameSerializer(game)
+        player_serializer = PlayerSerializer(player) 
+        
+        #return a json object containing both the game and the player's object
+        return Response({
+            'game': game_serializer.data,
+            'player': player_serializer.data
+        })
     
     elif request.method == 'GET': #retrieve info for an existing game
         if 'access_code' in request.query_params:
@@ -46,8 +49,12 @@ def join(request):
         accesscode = request.data['access_code']
         player.join_game(accesscode)
         game = Game.objects.get(access_code=accesscode)
-        serializer = GameSerializer(game)
-        return Response(serializer.data)
+        game_serializer = GameSerializer(game)
+        player_serializer = PlayerSerializer(player)
+        return Response({
+            'game': game_serializer.data,
+            'player': player_serializer.data
+        })
         
 
 @api_view(['GET'])
