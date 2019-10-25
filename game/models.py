@@ -45,10 +45,11 @@ class Game(models.Model):
     def shuffle_cards(self):
         players = self.get_player_list()
         indices = range(len(players))
-        random.shuffle(indices)
-        for index, player in zip(indices, players):
+        shuffled = list(indices)
+        random.shuffle(shuffled)
+        for index, player in zip(shuffled, players):
             player.card_idx = index
-            player.save
+            player.save()
 
     # def expand_playset(self):
     #     """Retrieve the cards from the selected playset from the database"""
