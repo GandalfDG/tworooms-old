@@ -68,5 +68,11 @@ class GameTestCase(TestCase):
 class CardsTestCase(TestCase):
     def test_simplest_deck(self):
         deck = gl.build_deck("basic", 6)
-        print(deck)
         self.assertEqual(len(deck), 6)
+    
+    def test_uneven_deck(self):
+        deck = gl.build_deck("basic", 7)
+        self.assertEqual(len(deck), 7)
+        gambler = [card for card in deck if card == 'gambler'][0]
+        self.assertIsNotNone(gambler)
+        
