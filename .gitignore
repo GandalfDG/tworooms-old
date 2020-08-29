@@ -135,3 +135,4 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+.devcontainer
